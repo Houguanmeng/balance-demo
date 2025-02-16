@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background: #f0f0f0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .balance {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            margin-top: 50px;
+        }
+
+        .pivot {
+            position: absolute;
+            left: 50%;
+            top: 150px;
+            width: 10px;
+            height: 60px;
+            background: #666;
+            transform: translateX(-50%);
+            border-radius: 2px;
+            z-index: 2;
+        }
+
+        .beam {
+            position: absolute;
+            left: 50%;
+            top: 180px;
+            width: 400px;
+            height: 10px;
+            background: #444;
+            transform-origin: center top;
+            transition: transform 0.8s ease-in-out;
+            border-radius: 3px;
+        }
+
+        .pan {
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            background: #888;
+            border-radius: 5px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            transition: transform 0.8s ease-in-out;
+        }
+
+        #leftPan {
+            left: -200px;
+            top: 20px;
+        }
+
+        #rightPan {
+            right: -200px;
+            top: 20px;
+        }
+
+        .controls {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        input {
+            width: 80px;
+            padding: 8px;
+            margin: 0 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 8px 20px;
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="balance">
+        <div class="pivot"></div>
+        <div class="beam" id="beam">
+            <div class="pan" id="leftPan"></div>
+            <div class="pan" id="rightPan"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <label>左盘重量: <input type="number" id="leftWeight" value="0"></label>
+        <label>右盘重量: <input type="number" id="rightWeight" value="0"></label>
+        <button onclick="reset()">重置</button>
+    </div>
+
+    <script>
+        // 确保DOM加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            const beam = document.getElementById('beam');
+            const leftInput = document.getElementById('leftWeight');
+            const rightInput = document.getElementById('rightWeight');
+
+            function update() {
+                const left = parseInt(leftInput.value) || 0;
+                const right = parseInt(rightInput.value) || 0;
+                const angle = (right - left) * 0.3;
+                beam.style.transform = `rotate(${Math.max(-30, Math.min(30, angle))}deg)`;
+            }
+
+            function reset() {
+                leftInput.value = 0;
+                rightInput.value = 0;
+                update();
+            }
+
+            leftInput.addEventListener('input', update);
+            rightInput.addEventListener('input', update);
+            update(); // 初始化
+        });
+    </script>
+</body>
+</html>
